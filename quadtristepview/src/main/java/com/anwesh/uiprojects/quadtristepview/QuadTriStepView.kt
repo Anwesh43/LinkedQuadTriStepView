@@ -195,4 +195,27 @@ class QuadTriStepView(ctx : Context) : View(ctx) {
             curr.startUpdating(cb)
         }
     }
+
+    data class Renderer(var view : QuadTriStepView) {
+
+        private val animator : Animator = Animator(view)
+
+        private val qts : QuadTriStep = QuadTriStep(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#BDBDBD"))
+            qts.draw(canvas, paint)
+            animator.animate {
+                qts.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTa() {
+            qts.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
