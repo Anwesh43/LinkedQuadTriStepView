@@ -18,8 +18,8 @@ val lines : Int = 4
 val scDiv : Double = 0.51
 val scGap : Float = 0.05f
 val sizeFactor : Int = 3
-val strokeFactor : Int = 80
-
+val strokeFactor : Int = 130
+val DELAY : Long = 30
 fun Int.getInverse() : Float = 1f / this
 
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.getInverse(), Math.max(0f, this - i * n.getInverse())) * n
@@ -51,9 +51,11 @@ fun Canvas.drawQTSNode(i : Int, scale : Float, paint : Paint) {
         path.lineTo(size * ( 1 - 2 *(j % 2)), 0f)
         path.lineTo(0f, size * sc * (1 - 2 * (j / 2)))
         path.lineTo(0f, 0f)
-        drawLine(0f, 0f, (size - paint.strokeWidth) * ( 1 - 2 *(j % 2)), 0f, paint)
         paint.style = Paint.Style.FILL
         drawPath(path, paint)
+        if (sc < 1) {
+            drawLine(0f, 0f, (size - paint.strokeWidth * 0.8f) * (1 - 2 * (j % 2)), 0f, paint)
+        }
         restore()
     }
     restore()
@@ -104,7 +106,7 @@ class QuadTriStepView(ctx : Context) : View(ctx) {
             if (animated) {
                 cb()
                 try {
-                    Thread.sleep(50)
+                    Thread.sleep(DELAY)
                     view.invalidate()
                 } catch(ex : Exception) {
 
