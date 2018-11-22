@@ -34,12 +34,12 @@ fun Canvas.drawQTSNode(i : Int, scale : Float, paint : Paint) {
     paint.color = Color.parseColor("#1565C0")
     val w : Float = width.toFloat()
     val h : Float = height.toFloat()
-    paint.strokeWidth = Math.min(w, h) / strokeFactor
     paint.strokeCap = Paint.Cap.ROUND
+    paint.strokeWidth = Math.min(w, h) / strokeFactor
     val gap : Float = w / (nodes + 1)
     val sc1 : Float = scale.divideScale(0, 2)
     val sc2 : Float = scale.divideScale(1, 2)
-    val size : Float = Math.min(w, h) /
+    val size : Float = gap / sizeFactor
     save()
     translate(gap * (i + 1), h/2)
     rotate(90f * sc2)
@@ -48,14 +48,11 @@ fun Canvas.drawQTSNode(i : Int, scale : Float, paint : Paint) {
         save()
         val path : Path = Path()
         path.moveTo(0f, 0f)
-        path.lineTo(size, 0f)
-        path.lineTo(0f, -size * sc)
+        path.lineTo(size * ( 1 - 2 *(j % 2)), 0f)
+        path.lineTo(0f, size * sc * (1 - 2 * (j / 2)))
         path.lineTo(0f, 0f)
-        if (sc > 0f) {
-            paint.style = Paint.Style.FILL
-        } else {
-            paint.style = Paint.Style.STROKE
-        }
+        drawLine(0f, 0f, (size - paint.strokeWidth) * ( 1 - 2 *(j % 2)), 0f, paint)
+        paint.style = Paint.Style.FILL
         drawPath(path, paint)
         restore()
     }
@@ -225,7 +222,7 @@ class QuadTriStepView(ctx : Context) : View(ctx) {
         fun create(activity : Activity)  : QuadTriStepView {
             val view : QuadTriStepView = QuadTriStepView(activity)
             activity.setContentView(view)
-            return view 
+            return view
         }
     }
 }
