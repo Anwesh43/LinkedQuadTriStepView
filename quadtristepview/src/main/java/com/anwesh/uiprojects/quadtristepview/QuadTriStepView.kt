@@ -220,4 +220,12 @@ class QuadTriStepView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    companion object {
+        fun create(activity : Activity)  : QuadTriStepView {
+            val view : QuadTriStepView = QuadTriStepView(activity)
+            activity.setContentView(view)
+            return view 
+        }
+    }
 }
